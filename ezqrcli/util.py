@@ -1,7 +1,8 @@
-# pylint: disable=missing-function-docstring, missing-class-docstring, missing-module-docstring, unused-import, protected-access, redefined-outer-name, line-too-long
+# pylint: disable=missing-function-docstring, missing-class-docstring, missing-module-docstring, unused-import, protected-access, redefined-outer-name, line-too-long, subprocess-run-check
 import sys
 import subprocess
 import importlib
+
 
 def ensure_qrcode():
     """
@@ -9,31 +10,36 @@ def ensure_qrcode():
     Attempts to import the 'qrcode' module. If the module is not found,
     it installs it using pip. After installation, it verifies the installation
     by attempting to import the module again.
-    
+
     Returns:
         module: The 'qrcode' module if it is successfully imported.
-    
+
     Raises:
         ImportError: If the 'qrcode' module cannot be imported after installation attempt.
     """
     try:
-        if importlib.util.find_spec("qrcode") is None:
-            print("Fetching dependency: QRCode module...")
-            process = subprocess.Popen(
-                [sys.executable, "-m", "pip", "install", "-q", "qrcode"],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            _, stderr = process.communicate()
-            if stderr:
-                print("Encountered error while attempting to install dependencies:", stderr.decode())
-                raise ImportError("Failed to install 'qrcode'.")
+        # Attempt to import 'qrcode' directly
+        return importlib.import_module("qrcode")
+    except ImportError as e:
+        print("QRCode module not found. Installing via pip...")
 
-        qrcode = importlib.import_module("qrcode")
-        print("Dependencies satisfied.")
-        return qrcode
-    except ImportError:
-        print("Failed to install dependencies. Please install the 'qrcode' package manually.")
-        raise
+        # Install the qrcode module with pip, using `sys.executable` to ensure compatibility
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "install", "qrcode"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
-qrcode = ensure_qrcode()
+        # Check if the installation was successful
+        if result.returncode != 0:
+            raise ImportError(
+                "Failed to install 'qrcode'. Please install it manually."
+            ) from e
+
+    # Attempt to import 'qrcode' again after installation
+    try:
+        return importlib.import_module("qrcode")
+    except ImportError as e:
+        raise ImportError(
+            "Failed to import 'qrcode' after installation. Please install it manually."
+        ) from e
