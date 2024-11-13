@@ -7,7 +7,7 @@ readme = "README.md"
 repository = "https://github.com/DJStompZone/ezqrcli.git"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.10,<4.0"
 qrcode = "^8.0"
 argparse = "^1.4.0"
 
