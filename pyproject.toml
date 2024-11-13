@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "ezqrcli"
 version = "1.0.0"
-description = ""
+description = "The easy command line QR code generator"
 authors = ["DJ Stomp <85457381+DJStompZone@users.noreply.github.com>"]
 readme = "README.md"
 
