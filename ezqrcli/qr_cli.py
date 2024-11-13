@@ -188,19 +188,24 @@ class QRCLI:
 
         Returns:
             str: The formatted string with the centered QR code text, top text,
-                 and bottom text, including padding.
+                and bottom text, including padding.
         """
-        self.centered_qr_text = "\n".join(
-            line.center(self._get_width()) for line in self.qr_text.splitlines()
-        )
-        return "\n".join(
-            [
-                f"{self.padding}{self.top_text.center(self.maxwidth)}",
-                self.centered_qr_text,
-                f"{self.bottom_text.center(self.maxwidth)}{self.padding}",
-            ]
-        )
+        term_center = int(os.get_terminal_size().columns // self.center_weight) - 2
+        
+        qrcode_text = '\n  '.join([
+            f"{self.top_text.center(term_center)}",
+            *[
+                line.center(term_center)
+                for line in [
+                    ea.center(self.maxwidth) 
+                    for ea in self._raw_qr.splitlines()
+                ]
+            ],
+            f"{self.bottom_text.center(term_center)}"
+        ])
 
+        return f"{self.padding}{qrcode_text}{self.padding}"
+    
     def _format_qr(self):
         """
         Formats the QR code by setting the bottom text and centering the QR code.

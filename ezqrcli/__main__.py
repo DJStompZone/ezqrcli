@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 This module provides a command-line interface (CLI) for generating and displaying QR codes
 in the terminal. It uses the argparse library to handle command-line arguments and the 
