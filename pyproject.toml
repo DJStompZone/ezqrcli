@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "ezqrcli"
+version = "0.1.0"
+description = ""
+authors = ["DJ Stomp <85457381+DJStompZone@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+qrcode = "^8.0"
+argparse = "^1.4.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

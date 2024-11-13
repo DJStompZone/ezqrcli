@@ -1,0 +1,8 @@
+build/
+dist/
+__pycache__/
+*.pyc
+*.pyo
+*.env
+poetry_cache/
+pytest_cache/
